@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DJ Digital Card</title>
+    
+    <!-- Configuración para que funcione como una App Nativa (Sin barras del navegador) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+
     <!-- Íconos de FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -44,11 +50,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('./logo_3d.png'); 
+            background-image: url('./Logo_3d.jpg'); 
             background-size: 85%;             
             background-position: center;          
             background-repeat: no-repeat;
-            opacity: 0.15;                        
+            opacity: 0.25;                        
             z-index: 0;                           
             pointer-events: none;                 
         }
@@ -165,7 +171,6 @@
             z-index: 1;
         }
 
-        /* Pestaña tarjeta no necesita scroll porque encaja perfecto */
         #pagina-tarjeta {
             overflow-y: hidden;
         }
@@ -180,9 +185,9 @@
         /* --- VISTA: MI TARJETA --- */
         .banner-seccion {
             position: relative;
-            height: 40vh; /* Proporcional a la pantalla */
+            height: 40vh; 
             max-height: 250px;
-            background-image: url('./logo_3d.png'); 
+            background-image: url('hey.png'); 
             background-size: cover;
             background-position: center;
         }
@@ -209,7 +214,7 @@
             border-radius: 50%;
             border: 4px solid #a100ff; 
             background-color: #000000;
-            background-image: url('perfil.jpeg'); /* insertar imagen perfil  */
+            background-image: url('perfil.jpeg'); 
             background-size: cover;
             background-position: center;
             box-shadow: 0 0 20px rgba(161, 0, 255, 0.5);
@@ -283,6 +288,7 @@
             letter-spacing: 0.5px;
         }
 
+        /* BOTÓN DE GUARDADO CON EFECTO DE PULSO GLOW */
         .btn-guardar {
             display: flex;
             justify-content: center;
@@ -301,10 +307,20 @@
             transition: all 0.2s;
             cursor: pointer;
             border: none;
+            animation: pulseGlow 2.5s infinite ease-in-out;
         }
         .btn-guardar:hover {
             transform: scale(1.02);
+            animation: none;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
         }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 4px 15px rgba(161, 0, 255, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(0, 242, 254, 0.7); transform: scale(1.01); }
+            100% { box-shadow: 0 4px 15px rgba(161, 0, 255, 0.4); }
+        }
+
         .btn-compartir {
             display: flex;
             justify-content: center;
@@ -323,8 +339,42 @@
             cursor: pointer;
         }
 
+        /* ESTILOS FORMULARIO INTERACTIVO DE COTIZACIÓN */
+        .form-cotizar {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #2c2c2e;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .form-grupo {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+        .form-grupo label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #00f2fe;
+            text-transform: uppercase;
+        }
+        .form-grupo input, .form-grupo select {
+            background: #1c1c1e;
+            border: 1px solid #3a3a3c;
+            border-radius: 6px;
+            padding: 10px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 13px;
+        }
+        .form-grupo input:focus, .form-grupo select:focus {
+            border-color: #a100ff;
+            outline: none;
+        }
+
         /* --- VISTA: SERVICIOS --- */
-        .nosotros-seccion { padding: 20px 25px 40px 25px; } /* Añadido espacio extra abajo del scroll interno */
+        .nosotros-seccion { padding: 20px 25px 40px 25px; } 
         .nosotros-seccion h2 {
             font-size: 22px;
             color: #ffffff;
@@ -334,7 +384,10 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+        .nosotros-seccion p { font-size: 14px; line-height: 1.6; color: #b3b3b3; }
+        .banner-nosotros {
         
+        }
 
         /* MENÚ DE NAVEGACIÓN INFERIOR DE FIJACIÓN ESTÁTICA */
         .nav-inferior {
@@ -374,7 +427,7 @@
             border-top: 2px solid #00f2fe;
         }
 
-        /* INTERACTIVIDAD: COMPARTIR */
+        /* INTERACTIVIDAD: COMPARTIR Y QR MODAL */
         .modal-compartir {
             position: absolute;
             bottom: -100%; 
@@ -438,7 +491,7 @@
     <div class="header-superior">
         <i class="fa-solid fa-bars" onclick="toggleMenuLateral()"></i>
         <div class="logo-dj">DJ FABRIX</div>
-        <i class="fa-solid fa-qrcode" onclick="alert('Tu código QR estará asociado a esta URL')"></i>
+        <i class="fa-solid fa-qrcode" onclick="toggleModalQR()"></i>
     </div>
 
     <!-- MENÚ LATERAL INTERACTIVO -->
@@ -458,7 +511,7 @@
         </button>
     </div>
 
-    <!-- PÁGINA 1: MI TARJETA MAIN DJ SET (ENCADA AL 100%) -->
+    <!-- PÁGINA 1: MI TARJETA MAIN DJ SET -->
     <div id="pagina-tarjeta" class="vista-pagina activa">
         <div class="banner-seccion"></div>
         <div class="perfil-contenedor">
@@ -468,7 +521,7 @@
             <h1 class="nombre">DJ FABRIX</h1>
             <div class="cargo">GERENTE PROPIETARIO</div>
             
-            <!-- SECCIÓN ACCIONES RÁPIDAS EN CUADRÍCULA 2X2 -->
+            <!-- SECCIÓN ACCIONES RÁPIDAS (CON DEEP LINKS MEJORADOS) -->
             <div class="acciones-rapidas-grid">
                 <!-- BOOKING -->
                 <a href="tel:+593998005875" class="boton-redondo-wrapper">
@@ -476,12 +529,12 @@
                     <span>Booking</span>
                 </a>
                 <!-- WHATSAPP -->
-                <a href="https://wa.me/593998005875" target="_blank" class="boton-redondo-wrapper">
+                <a href="https://wa.me/593998005875?text=%C2%A1Hola%20DJ%20Fabrix!%20Vi%20tu%20tarjeta%20digital%20y%20me%20gustar%C3%ADa%20cotizar%20un%20evento." target="_blank" class="boton-redondo-wrapper">
                     <div class="boton-redondo ws-color"><i class="fa-brands fa-whatsapp"></i></div>
                     <span>WhatsApp</span>
                 </a>
-                <!-- INSTAGRAM PERFIL OFICIAL -->
-                <a href="https://www.instagram.com/cfabrix/?hl=es" target="_blank" class="boton-redondo-wrapper">
+                <!-- INSTAGRAM (DEEP LINK PARA INSTAGRAM APP) -->
+                <a href="instagram://user?username=cfabrix" onclick="setTimeout(function(){ window.location.href='https://www.instagram.com/cfabrix/?hl=es'; }, 400);" class="boton-redondo-wrapper">
                     <div class="boton-redondo ig-color"><i class="fa-brands fa-instagram"></i></div>
                     <span>Instagram</span>
                 </a>
@@ -516,13 +569,29 @@
             </p>
             
             <div class="banner-nosotros"></div>
+
+            <!-- SECCIÓN: TIPOS DE EVENTOS / ESPECIALIDADES -->
+            <h2 style="border-left: 4px solid #00f2fe; margin-top: 30px;">Especialidades</h2>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px;">
+                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 13px; font-weight: 600; color: #00f2fe;">
+                    <i class="fa-solid fa-champagne-glasses" style="margin-bottom: 5px; display: block; font-size: 16px;"></i> BODAS & PROTOCOLOS
+                </div>
+                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 13px; font-weight: 600; color: #a100ff;">
+                    <i class="fa-solid fa-briefcase" style="margin-bottom: 5px; display: block; font-size: 16px;"></i> CORPORATIVOS
+                </div>
+                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 13px; font-weight: 600; color: #a100ff;">
+                    <i class="fa-solid fa-cake-candles" style="margin-bottom: 5px; display: block; font-size: 16px;"></i> FIESTAS PRIVADAS
+                </div>
+                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 13px; font-weight: 600; color: #00f2fe;">
+                    <i class="fa-solid fa-clapperboard" style="margin-bottom: 5px; display: block; font-size: 16px;"></i> CLUBES & FESTIVALES
+                </div>
+            </div>
             
             <!-- SECCIÓN DE EQUIPAMIENTO TÉCNICO COMPLETO -->
             <h2 style="border-left: 4px solid #a100ff; margin-top: 25px;">Rider Técnico / Equipos</h2>
             <p style="font-size: 13.5px; color: #a3a3a3; margin-bottom: 15px;">Infraestructura y soporte técnico profesional de alta gama:</p>
             
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
                 <!-- 1. SISTEMA DE AUDIO PRINCIPAL -->
                 <div style="display: flex; align-items: flex-start; gap: 12px; background: #1c1c1e; padding: 12px; border-radius: 10px; border: 1px solid #2c2c2e;">
                     <i class="fa-solid fa-volume-high" style="font-size: 18px; color: #a100ff; width: 22px; text-align: center; margin-top: 3px;"></i>
@@ -572,8 +641,48 @@
                         </ul>
                     </div>
                 </div>
-
             </div>
+
+            <!-- NUEVA SECCIÓN PREMIUM: FORMULARIO INTERACTIVO DE COTIZACIÓN -->
+            <h2 style="border-left: 4px solid #00f2fe; margin-top: 30px;">Cotiza Tu Evento</h2>
+            <p style="font-size: 13.5px; color: #a3a3a3; margin-bottom: 10px;">Completa los datos y recibe tu presupuesto al instante en WhatsApp:</p>
+            <div class="form-cotizar">
+                <div class="form-grupo">
+                    <label>Fecha Estimada</label>
+                    <input type="date" id="cot-fecha">
+                </div>
+                <div class="form-grupo">
+                    <label>Tipo de Show / Evento</label>
+                    <select id="cot-tipo">
+                        <option value="Boda / Matrimonio">Boda / Matrimonio</option>
+                        <option value="Evento Corporativo">Evento Corporativo</option>
+                        <option value="Fiesta Privada / Cumpleaños">Fiesta Privada / Cumpleaños</option>
+                        <option value="Club / Festival">Club / Festival</option>
+                    </select>
+                </div>
+                <div class="form-grupo">
+                    <label>Ciudad / Ubicación del evento</label>
+                    <input type="text" id="cot-ciudad" placeholder="Ej: Latacunga, Quito, Ambato...">
+                </div>
+                <button type="button" onclick="enviarCotizacionWhatsApp()" style="width: 100%; padding: 12px; border: none; border-radius: 6px; background-color: #25D366; color: #fff; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 13px; display: flex; justify-content: center; align-items: center; gap: 8px;">
+                    Solicitar Presupuesto <i class="fa-brands fa-whatsapp"></i>
+                </button>
+            </div>
+
+            <!-- SECCIÓN: PREGUNTAS FRECUENTES (FAQ) -->
+            <h2 style="border-left: 4px solid #00f2fe; margin-top: 35px;">Preguntas Frecuentes</h2>
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;">
+                <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border-left: 3px solid #00f2fe;">
+                    <h5 style="margin: 0 0 5px 0; font-size: 13.5px; color: #ffffff;">¿Con cuánta anticipación debo reservar?</h5>
+                    <p style="margin: 0; font-size: 12.5px; color: #8f8f8f; line-height: 1.4;">Se recomienda separar la fecha con un mínimo de 15 a 30 días mediante un abono inicial.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border-left: 3px solid #a100ff;">
+                    <h5 style="margin: 0 0 5px 0; font-size: 13.5px; color: #ffffff;">¿Trabajas fuera de tu ciudad base?</h5>
+                    <p style="margin: 0; font-size: 12.5px; color: #8f8f8f; line-height: 1.4;">Sí, cuento con disponibilidad de movilización técnica a cualquier provincia bajo viáticos acordados.</p>
+                </div>
+            </div>
+
+            
         </div>
     </div>
 
@@ -609,6 +718,18 @@
         </div>
     </div>
 
+    <!-- MODAL INTERACTIVO PARA TU CÓDIGO QR -->
+    <div id="modalQR" class="modal-compartir">
+        <div class="modal-header">
+            <h3>Mi Código QR</h3>
+            <i class="fa-solid fa-xmark" onclick="toggleModalQR()"></i>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 10px 0 20px 0;">
+            <img src="./qr_neon.png" alt="QR DJ FABRIX" style="width: 200px; height: 200px; border-radius: 12px; border: 3px solid #a100ff; box-shadow: 0 0 20px rgba(161, 0, 255, 0.5);">
+            <span style="font-size: 13px; color: #a3a3a3; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Escanéame para guardar el portafolio</span>
+        </div>
+    </div>
+
 </div>
 
 <!-- JAVASCRIPT SINCRONIZADO -->
@@ -620,6 +741,11 @@
 
     function toggleModalCompartir() {
         const modal = document.getElementById('modalCompartir');
+        modal.classList.toggle('abierto');
+    }
+
+    function toggleModalQR() {
+        const modal = document.getElementById('modalQR');
         modal.classList.toggle('abierto');
     }
 
@@ -642,6 +768,26 @@
         if(idPagina === 'pagina-tarjeta') document.getElementById('nav-tarjeta').classList.add('activo');
         if(idPagina === 'pagina-nosotros') document.getElementById('nav-nosotros').classList.add('activo');
         toggleMenuLateral();
+    }
+
+    // LÓGICA DE PROCESAMIENTO E INYECCIÓN DE DATOS PARA WHATSAPP
+    function enviarCotizacionWhatsApp() {
+        const fecha = document.getElementById('cot-fecha').value;
+        const tipo = document.getElementById('cot-tipo').value;
+        const ciudad = document.getElementById('cot-ciudad').value;
+
+        if(!fecha || !ciudad) {
+            alert('Por favor, llena la fecha y la ubicación para procesar la cotización.');
+            return;
+        }
+
+        const mensaje = `¡Hola DJ Fabrix! Vi tu tarjeta digital y me interesa cotizar un show. Aquí los detalles:\n\n` +
+                        `🎧 Tipo de Evento: ${tipo}\n` +
+                        `📅 Fecha Estimada: ${fecha}\n` +
+                        `📍 Ubicación: ${ciudad}`;
+        
+        const urlFinal = `https://wa.me/593998005875?text=${encodeURIComponent(mensaje)}`;
+        window.open(urlFinal, '_blank');
     }
 
     function descargarContactoReal() {
