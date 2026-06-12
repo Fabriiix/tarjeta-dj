@@ -157,6 +157,9 @@
             width: 125px; height: 125px; border-radius: 50%; border: 4px solid #a100ff; 
             background-color: #000000; background-image: url('perfil.jpeg'); background-size: cover; background-position: center;
             box-shadow: 0 0 20px rgba(161, 0, 255, 0.5);
+            /* Importante para que el usuario no seleccione la imagen accidentalmente al hacer muchos clics */
+            user-select: none;
+            -webkit-user-select: none;
         }
         .info-seccion { text-align: center; padding: 5px 15px; }
         .nombre { font-size: 24px; font-weight: 900; text-transform: uppercase; color: #ffffff; margin: 2px 0; letter-spacing: 1px; }
@@ -311,7 +314,8 @@
     <div id="pagina-tarjeta" class="vista-pagina activa">
         <div class="banner-seccion"></div>
         <div class="perfil-contenedor">
-            <div class="foto-perfil" onclick="abrirPanelAdmin()" style="cursor: pointer;" title="Panel"></div>
+            <!-- AQUÍ SE APLICÓ EL EVENTO PARA LOS 10 CLICS EN LA FOTO -->
+            <div class="foto-perfil" onclick="manejarClicAdmin()" style="cursor: pointer;" title="Perfil"></div>
         </div>
         <div class="info-seccion">
             <h1 class="nombre">DJ FABRIX</h1>
@@ -732,6 +736,28 @@
        PANEL SECRETO ADMIN
     ========================== */
 
+    let contadorClicksAdmin = 0;
+    let timeoutAdmin;
+
+    // Esta función maneja los 10 clics en la foto de perfil
+    function manejarClicAdmin() {
+        contadorClicksAdmin++;
+        
+        // Limpiamos el contador de tiempo si se hace otro clic rápido
+        clearTimeout(timeoutAdmin);
+
+        // Si llega a 10 clics, abre el panel
+        if (contadorClicksAdmin >= 10) {
+            contadorClicksAdmin = 0;
+            abrirPanelAdmin();
+        } else {
+            // Si el usuario deja de hacer clics por 3 segundos, se reinicia la cuenta a 0
+            timeoutAdmin = setTimeout(() => {
+                contadorClicksAdmin = 0;
+            }, 3000); 
+        }
+    }
+
     function abrirPanelAdmin() {
         const clave = prompt("Ingrese la clave de administrador");
         if (clave !== "FABRIX2026") {
@@ -740,7 +766,7 @@
         }
 
         const opcion = prompt(
-            "PANEL ADMIN\n\n1 = Reiniciar jugadores\n2 = Reiniciar stock\n3 = Reiniciar todo\n4 = Ver stock actual"
+            "PANEL ADMIN\n\n1 = Reiniciar jugadores\n2 = Modificar cantidad de stock\n3 = Reiniciar todo (Stock vuelve a 5)\n4 = Ver stock actual"
         );
 
         let huboCambios = false;
@@ -753,18 +779,23 @@
                 break;
 
             case "2":
-                const nuevoStock = prompt("Nuevo stock:");
-                if(nuevoStock !== null) {
-                    localStorage.setItem("stockPremiosFabrix", nuevoStock);
-                    alert("Stock actualizado");
+                // Mostrar stock actual y pedir el nuevo
+                let stockActual = localStorage.getItem("stockPremiosFabrix");
+                const nuevoStock = prompt("El stock actual es: " + stockActual + "\n\nIngrese la nueva cantidad de stock que desea tener:");
+                
+                if(nuevoStock !== null && nuevoStock.trim() !== "" && !isNaN(nuevoStock)) {
+                    localStorage.setItem("stockPremiosFabrix", parseInt(nuevoStock).toString());
+                    alert("Stock actualizado exitosamente a: " + nuevoStock);
                     huboCambios = true;
+                } else if (nuevoStock !== null) {
+                    alert("Por favor ingrese un número válido.");
                 }
                 break;
 
             case "3":
                 localStorage.removeItem("jugadoFabrix");
                 localStorage.setItem("stockPremiosFabrix", "5");
-                alert("Juego reiniciado completamente");
+                alert("Juego reiniciado completamente. El stock vuelve a ser 5.");
                 huboCambios = true;
                 break;
 
