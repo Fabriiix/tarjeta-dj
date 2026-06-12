@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>DJ Digital Card</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            /* MODIFICADO: 100svh en lugar de 100vh */
+            height: 100svh;
             overflow: hidden; 
             -webkit-tap-highlight-color: transparent;
         }
@@ -29,7 +30,8 @@
             background-color: #121212; 
             width: 100%;
             max-width: 450px;
-            height: 100vh; 
+            /* MODIFICADO: 100svh en lugar de 100vh */
+            height: 100svh; 
             position: relative;
             box-shadow: 0 0 30px rgba(161, 0, 255, 0.2); 
             box-sizing: border-box;
@@ -131,7 +133,8 @@
         .vista-pagina {
             display: none;
             width: 100%;
-            height: calc(100vh - 130px); 
+            /* MODIFICADO: 100svh en lugar de 100vh */
+            height: calc(100svh - 130px); 
             overflow-y: auto; 
             -webkit-overflow-scrolling: touch;
             box-sizing: border-box;
@@ -223,7 +226,6 @@
         .borde-azul { border-left: 4px solid #00f2fe; padding-left: 12px; }
         .borde-morado { border-left: 4px solid #a100ff; padding-left: 12px; }
         
-
         .rider-card { display: flex; align-items: flex-start; gap: 15px; background: #16161a; padding: 16px; border-radius: 12px; border: 1px solid #222226; margin-bottom: 15px; }
         .rider-card i { font-size: 20px; margin-top: 2px; }
         .rider-card h4 { margin: 0 0 8px 0; font-size: 15px; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
@@ -252,6 +254,8 @@
         .nav-inferior {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 65px; background-color: #121212; border-top: 1px solid #1f1f1f;
             display: flex; justify-content: space-around; align-items: center; z-index: 100; box-sizing: border-box; box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+            /* MODIFICADO: Padding inferior para dispositivos con barra de gestos en iOS */
+            padding-bottom: env(safe-area-inset-bottom);
         }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #666; font-size: 11px; font-weight: 700; text-transform: uppercase; width: 100%; height: 100%; justify-content: center; cursor: pointer; letter-spacing: 0.5px; }
         .nav-item i { font-size: 18px; margin-bottom: 4px; }
@@ -313,7 +317,6 @@
     <div id="pagina-tarjeta" class="vista-pagina activa">
         <div class="banner-seccion"></div>
         <div class="perfil-contenedor">
-            <!-- AQUÍ SE APLICÓ EL EVENTO PARA LOS 10 CLICS EN LA FOTO -->
             <div class="foto-perfil" onclick="manejarClicAdmin()" style="cursor: pointer;" title="Perfil"></div>
         </div>
         <div class="info-seccion">
@@ -402,7 +405,7 @@
                 <div>
                     <h4>MICROFONÍA PROFESIONAL</h4>
                     <ul>
-                        <li>1x Micrófono Inalámbrico Sennheiser XS Wireless1</li>
+                        <li>1x Micrófono Inalámbrico Sennheiser XS Wireless 1</li>
                         <li>2x Micrófonos Alámbricos Shure SM58 Vocales</li>
                     </ul>
                 </div>
@@ -500,7 +503,7 @@
 
     <div id="modalJuego" class="modal-compartir">
         <div class="modal-header">
-            <h3>Raspa y Gana una cerveza🍻</h3>
+            <h3>Raspa y Gana tu Pola 🍻</h3>
             <i class="fa-solid fa-xmark" onclick="toggleModalJuego()"></i>
         </div>
         <div style="text-align: center; padding: 5px 0 20px 0;">
@@ -508,7 +511,7 @@
                 <i class="fa-solid fa-fire"></i> <span id="textoContadorPremios">Cargando stock...</span>
             </div>
             <p id="instruccionesJuego" style="font-size: 13px; color: #e0e0e0; margin-bottom: 15px;">
-                Usa tu dedo sobre el círculo gris para raspar y descubrir si ganaste.
+                Usa tu dedo o mouse sobre el círculo gris para raspar y descubrir si ganaste.
             </p>
             <div class="raspa-contenedor">
                 <div id="raspaResultado" class="raspa-resultado-oculto"></div>
@@ -620,7 +623,7 @@
 
             divResultado.innerHTML = `
                 <i class="fa-solid fa-beer-mugs-no_scratch" style="color:#ff9900;"></i>
-                <h4 style="color:#25D366;">¡GANASTE UNA CERVEZA!</h4>
+                <h4 style="color:#25D366;">¡GANASTE UNA BIER!</h4>
                 <p>Quedan sólo ${stockActual} polas disponibles en stock.</p>
             `;
             btnReclamar.setAttribute('href', `https://wa.me/593998005875?text=%C2%A1Hola%20DJ%20Fabrix!%20Acabo%20de%20usar%20el%20Raspa%20y%20Gana%20de%20tu%20tarjeta%20y%20%C2%A1Me%20gan%C3%A9%20la%20cerveza%20de%20cortes%C3%ADa!%20%F0%9F%8D%BB`);
