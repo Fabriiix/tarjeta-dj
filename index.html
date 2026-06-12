@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DJ Digital Card</title>
     
-    <!-- Configuración para que funcione como una App Nativa (Sin barras del navegador) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <!-- Íconos de FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* CONFIGURACIÓN ESTILO NEÓN / NOCTURNO */
@@ -23,26 +21,24 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden; /* Evita que todo el navegador del celular haga scroll */
+            overflow: hidden; 
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* CONTENEDOR TIPO CELULAR EDICIÓN SPECIAL DJ */
         .tarjeta-container {
             background-color: #121212; 
             width: 100%;
             max-width: 450px;
-            height: 100vh; /* Se encaja exactamente al alto de la pantalla disponible */
+            height: 100vh; 
             position: relative;
             box-shadow: 0 0 30px rgba(161, 0, 255, 0.2); 
             box-sizing: border-box;
-            overflow: hidden; /* Congela el marco exterior */
+            overflow: hidden; 
             display: flex;
             flex-direction: column;
             color: #ffffff;
         }
 
-        /* EFECTO DE TU LOGO 3D DE FONDO EN TODA LA WEB */
         .tarjeta-container::before {
             content: "";
             position: absolute;
@@ -51,15 +47,15 @@
             width: 100%;
             height: 100%;
             background-image: url('./Logo_3d.jpg'); 
-            background-size: 85%;             
+            background-size: 85%;            
             background-position: center;          
             background-repeat: no-repeat;
             opacity: 0.25;                        
             z-index: 0;                           
-            pointer-events: none;                 
+            pointer-events: none;                
         }
 
-        /* ENCABEZADO SUPERIOR ELECTRÓNICO */
+        /* ENCABEZADO SUPERIOR */
         .header-superior {
             display: flex;
             justify-content: space-between;
@@ -71,12 +67,7 @@
             box-sizing: border-box;
             z-index: 10;
         }
-        .header-superior i {
-            font-size: 24px;
-            color: #888;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
+        .header-superior i { font-size: 24px; color: #888; cursor: pointer; transition: color 0.2s; }
         .header-superior i:hover { color: #a100ff; } 
         
         .logo-dj {
@@ -85,9 +76,18 @@
             letter-spacing: 2px;
             color: #ffffff;
             text-shadow: 0 0 10px #a100ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* INTERACTIVIDAD: MENÚ LATERAL */
+        .eq-bars { display: flex; gap: 2px; align-items: flex-end; height: 14px; }
+        .eq-bar { width: 3px; background-color: #00f2fe; animation: bounce 0.8s ease infinite alternate; }
+        .eq-bar:nth-child(2) { animation-duration: 0.5s; background-color: #a100ff; }
+        .eq-bar:nth-child(3) { animation-duration: 0.7s; }
+        @keyframes bounce { 0% { height: 3px; } 100% { height: 14px; } }
+
+        /* MENÚ LATERAL */
         .menu-lateral {
             position: absolute;
             top: 65px; 
@@ -100,18 +100,8 @@
             padding: 20px;
             box-sizing: border-box;
         }
-
-        .menu-lateral.abierto {
-            left: 0;
-        }
-
-        .cuadricula-menu {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
+        .menu-lateral.abierto { left: 0; }
+        .cuadricula-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
         .tarjeta-opcion {
             background-color: rgba(255, 255, 255, 0.05); 
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -128,358 +118,155 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-
         .tarjeta-opcion i { font-size: 32px; }
-
-        .tarjeta-opcion.activa {
-            background-color: #a100ff;
-            color: #ffffff;
-            border-color: #b84dff;
-            box-shadow: 0 0 15px rgba(161, 0, 255, 0.6);
-        }
-
-        .tarjeta-opcion:active { transform: scale(0.96); }
-
+        .tarjeta-opcion.activa { background-color: #a100ff; color: #ffffff; border-color: #b84dff; box-shadow: 0 0 15px rgba(161, 0, 255, 0.6); }
         .btn-guardar-menu {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            background-color: #00f2fe;
-            color: #000000;
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            background-color: #00f2fe; color: #000000; width: 100%; padding: 14px;
+            border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;
             box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-            transition: background-color 0.2s;
         }
 
-        /* VISTAS PRINCIPALES (ZONA DE SCROLL INTERNO DINÁMICO) */
+        /* VISTAS PRINCIPALES */
         .vista-pagina {
             display: none;
             width: 100%;
-            height: calc(100vh - 130px); /* Resta exactamente el header y el nav inferior */
-            overflow-y: auto; /* Permite scroll únicamente si el contenido sobrepasa este bloque */
+            height: calc(100vh - 130px); 
+            overflow-y: auto; 
             -webkit-overflow-scrolling: touch;
             box-sizing: border-box;
             animation: fadeIn 0.3s ease-in-out;
             position: relative;
             z-index: 1;
         }
-
-        #pagina-tarjeta {
-            overflow-y: hidden;
-        }
-
+        #pagina-tarjeta { overflow-y: hidden; }
         .vista-pagina.activa { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* --- VISTA: MI TARJETA --- */
+        /* PÁGINA 1: TARJETA */
         .banner-seccion {
-            position: relative;
-            height: 40vh; 
-            max-height: 250px;
-            background-image: url('hey.png'); 
-            background-size: cover;
-            background-position: center;
+            position: relative; height: 35vh; max-height: 220px;
+            background-image: url('hey.png'); background-size: cover; background-position: center;
         }
         .banner-seccion::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            background: #121212;
-            clip-path: polygon(0 100%, 100% 100%, 100% 0);
+            content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 40px;
+            background: #121212; clip-path: polygon(0 100%, 100% 100%, 100% 0);
         }
-        .perfil-contenedor {
-            display: flex;
-            justify-content: center;
-            position: relative;
-            margin-top: -80px;
-            z-index: 5;
-        }
+        .perfil-contenedor { display: flex; justify-content: center; position: relative; margin-top: -80px; z-index: 5; }
         .foto-perfil {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            border: 4px solid #a100ff; 
-            background-color: #000000;
-            background-image: url('perfil.jpeg'); 
-            background-size: cover;
-            background-position: center;
+            width: 125px; height: 125px; border-radius: 50%; border: 4px solid #a100ff; 
+            background-color: #000000; background-image: url('perfil.jpeg'); background-size: cover; background-position: center;
             box-shadow: 0 0 20px rgba(161, 0, 255, 0.5);
         }
-        .info-seccion {
-            text-align: center;
-            padding: 10px 20px;
-        }
-        .nombre {
-            font-size: 28px;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #ffffff;
-            margin: 5px 0 2px 0;
-            letter-spacing: 1px;
-        }
-        .cargo {
-            font-size: 13px;
-            font-weight: 700;
-            color: #00f2fe; 
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
+        .info-seccion { text-align: center; padding: 5px 15px; }
+        .nombre { font-size: 24px; font-weight: 900; text-transform: uppercase; color: #ffffff; margin: 2px 0; letter-spacing: 1px; }
+        .cargo { font-size: 12px; font-weight: 700; color: #00f2fe; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
 
-        /* CUADRÍCULA SIMÉTRICA PARA BOTONES DE CONTACTO/REDES */
-        .acciones-rapidas-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            max-width: 290px;
-            margin: 0 auto 20px auto;
-        }
-        .boton-redondo-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            cursor: pointer;
-        }
+        .acciones-rapidas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 290px; margin: 0 auto 10px auto; }
+        .boton-redondo-wrapper { display: flex; flex-direction: column; align-items: center; text-decoration: none; cursor: pointer; }
         .boton-redondo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #1f1f1f;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #ffffff;
-            font-size: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.2s ease;
+            width: 50px; height: 50px; border-radius: 50%; background-color: #1f1f1f; border: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: center; align-items: center; color: #ffffff; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease;
         }
-        .boton-redondo-wrapper:hover .boton-redondo {
-            background-color: #a100ff;
-            color: #ffffff;
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(161, 0, 255, 0.6);
-        }
+        .boton-redondo-wrapper:hover .boton-redondo { background-color: #a100ff; transform: translateY(-2px); box-shadow: 0 0 15px rgba(161, 0, 255, 0.6); }
         .boton-redondo-wrapper:hover .boton-redondo.ws-color { background-color: #25D366; box-shadow: 0 0 15px rgba(37, 211, 102, 0.6); }
         .boton-redondo-wrapper:hover .boton-redondo.ig-color { background-color: #E1306C; box-shadow: 0 0 15px rgba(225, 48, 108, 0.6); }
         .boton-redondo-wrapper:hover .boton-redondo.tk-color { background-color: #00f2fe; box-shadow: 0 0 15px rgba(0, 242, 254, 0.6); color: #000; }
+        .boton-redondo-wrapper span { font-size: 10px; color: #a3a3a3; margin-top: 5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .boton-redondo-wrapper span {
-            font-size: 10px;
-            color: #a3a3a3;
-            margin-top: 5px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* BOTÓN DE GUARDADO CON EFECTO DE PULSO GLOW */
         .btn-guardar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #a100ff 0%, #00f2fe 100%); 
-            color: #ffffff;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 30px; 
-            font-weight: 700;
-            font-size: 15px;
-            margin: 0 auto 12px auto;
-            width: 75%;
-            box-shadow: 0 4px 15px rgba(161, 0, 255, 0.3);
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            background: linear-gradient(135deg, #a100ff 0%, #00f2fe 100%); color: #ffffff; padding: 10px; border-radius: 30px; 
+            font-weight: 700; font-size: 14px; margin: 0 auto 8px auto; width: 75%; border: none; cursor: pointer;
             animation: pulseGlow 2.5s infinite ease-in-out;
         }
-        .btn-guardar:hover {
-            transform: scale(1.02);
-            animation: none;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 4px 15px rgba(161, 0, 255, 0.4); }
-            50% { box-shadow: 0 4px 25px rgba(0, 242, 254, 0.7); transform: scale(1.01); }
-            100% { box-shadow: 0 4px 15px rgba(161, 0, 255, 0.4); }
-        }
+        @keyframes pulseGlow { 0% { box-shadow: 0 4px 15px rgba(161, 0, 255, 0.4); } 50% { box-shadow: 0 4px 25px rgba(0, 242, 254, 0.7); transform: scale(1.01); } 100% { box-shadow: 0 4px 15px rgba(161, 0, 255, 0.4); } }
 
         .btn-compartir {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            background-color: transparent;
-            color: #a3a3a3;
-            border: 1px solid #333;
-            text-decoration: none;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            margin: 0 auto;
-            text-transform: uppercase;
-            cursor: pointer;
+            display: flex; justify-content: center; align-items: center; gap: 8px; background-color: transparent; color: #a3a3a3;
+            border: 1px solid #333; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 600; margin: 0 auto; text-transform: uppercase; cursor: pointer;
         }
 
-        /* ESTILOS FORMULARIO INTERACTIVO DE COTIZACIÓN */
-        .form-cotizar {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid #2c2c2e;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 20px;
+        /* BURBUJA FLOTANTE */
+        .burbuja-messenger {
+            position: absolute; bottom: 85px; right: 20px; width: 65px; height: 65px; border-radius: 50%;
+            background: linear-gradient(135deg, #ff9900 0%, #ff5500 100%); box-shadow: 0 0 20px #ff9900;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 900; cursor: pointer;
+            animation: flotarBurbuja 3s infinite ease-in-out, pulsoNeonBeer 2s infinite alternate; border: 2px solid #ffffff; box-sizing: border-box;
         }
-        .form-grupo {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            margin-bottom: 12px;
-        }
-        .form-grupo label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #00f2fe;
-            text-transform: uppercase;
-        }
-        .form-grupo input, .form-grupo select {
-            background: #1c1c1e;
-            border: 1px solid #3a3a3c;
-            border-radius: 6px;
-            padding: 10px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 13px;
-        }
-        .form-grupo input:focus, .form-grupo select:focus {
-            border-color: #a100ff;
-            outline: none;
-        }
+        .burbuja-messenger i { font-size: 20px; color: #ffffff; margin-bottom: 2px; }
+        .burbuja-messenger span { font-size: 7.5px; font-weight: 900; color: #ffffff; text-transform: uppercase; text-align: center; line-height: 1; padding: 0 2px; }
+        @keyframes flotarBurbuja { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        @keyframes pulsoNeonBeer { 0% { box-shadow: 0 0 12px rgba(255, 153, 0, 0.6); } 100% { box-shadow: 0 0 22px rgba(255, 85, 0, 0.9); } }
 
-        /* --- VISTA: SERVICIOS --- */
+        /* JUEGO RASPA Y GANA */
+        .marcador-premios {
+            background-color: rgba(255, 153, 0, 0.1); border: 1px dashed #ff9900; padding: 6px 12px; border-radius: 20px;
+            font-size: 11px; font-weight: 700; color: #ff9900; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px; text-transform: uppercase;
+        }
+        .raspa-contenedor {
+            position: relative; width: 240px; height: 240px; margin: 0 auto; border-radius: 50%;
+            background-color: #1a1a1a; border: 4px solid #ff9900; box-shadow: 0 0 20px rgba(255, 153, 0, 0.4); overflow: hidden; display: flex; justify-content: center; align-items: center;
+        }
+        .raspa-resultado-oculto { text-align: center; padding: 20px; user-select: none; }
+        .raspa-resultado-oculto i { font-size: 45px; margin-bottom: 10px; display: block; }
+        .raspa-resultado-oculto h4 { margin: 0 0 5px 0; font-size: 16px; text-transform: uppercase; font-weight: 800; }
+        .raspa-resultado-oculto p { margin: 0; font-size: 12px; color: #a3a3a3; }
+        .canvas-raspable { position: absolute; top: 0; left: 0; cursor: pointer; border-radius: 50%; z-index: 5; touch-action: none; }
+
+        /* PÁGINA 2: SERVICIOS */
         .nosotros-seccion { padding: 20px 25px 40px 25px; } 
-        .nosotros-seccion h2 {
-            font-size: 22px;
-            color: #ffffff;
-            margin-top: 0;
-            border-left: 4px solid #00f2fe;
-            padding-left: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .nosotros-seccion h2 { font-size: 20px; font-weight: 800; color: #ffffff; margin-top: 25px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; }
+        .borde-azul { border-left: 4px solid #00f2fe; padding-left: 12px; }
+        .borde-morado { border-left: 4px solid #a100ff; padding-left: 12px; }
         .nosotros-seccion p { font-size: 14px; line-height: 1.6; color: #b3b3b3; }
-        .banner-nosotros {
+        .banner-nosotros { height: 140px; background-image: url('hey.png'); background-size: cover; background-position: center; border-radius: 8px; margin: 15px 0; border: 1px solid #333; }
 
+        .rider-card { display: flex; align-items: flex-start; gap: 15px; background: #16161a; padding: 16px; border-radius: 12px; border: 1px solid #222226; margin-bottom: 15px; }
+        .rider-card i { font-size: 20px; margin-top: 2px; }
+        .rider-card h4 { margin: 0 0 8px 0; font-size: 15px; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+        .rider-card ul { margin: 0; padding-left: 18px; font-size: 13.5px; color: #92929e; line-height: 1.5; }
+        .rider-card ul li { margin-bottom: 4px; }
+
+        .faq-card { background: #16161a; padding: 16px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #222226; }
+        .faq-card.borde-izq-azul { border-left: 3px solid #00f2fe; }
+        .faq-card.borde-izq-morado { border-left: 3px solid #a100ff; }
+        .faq-card h5 { margin: 0 0 6px 0; font-size: 14.5px; color: #ffffff; font-weight: 700; }
+        .faq-card p { margin: 0; font-size: 13px; color: #92929e; line-height: 1.5; }
+
+        /* FORMULARIO COTIZAR */
+        .form-cotizar { background: transparent; border: 1px solid #1f1f24; border-radius: 12px; padding: 20px 15px; margin-top: 15px; margin-bottom: 25px; }
+        .form-grupo { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+        .form-grupo label { font-size: 12px; font-weight: 700; color: #00f2fe; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-grupo input, .form-grupo select { background: #1c1c1e; border: 1px solid #2c2c2e; border-radius: 8px; padding: 14px; color: #fff; font-family: inherit; font-size: 14px; width: 100%; box-sizing: border-box; }
+        .form-grupo input::placeholder { color: #55555e; }
+        .form-grupo input:focus, .form-grupo select:focus { border-color: #00f2fe; outline: none; }
+        .btn-solicitar-cot {
+            width: 100%; padding: 14px; border: none; border-radius: 8px; background-color: #1ad154; color: #ffffff; font-weight: 700; font-size: 14px; cursor: pointer; text-transform: uppercase; display: flex; justify-content: center; align-items: center; gap: 8px; letter-spacing: 0.5px; transition: background-color 0.2s;
         }
+        .btn-solicitar-cot:hover { background-color: #15b346; }
 
-        /* MENÚ DE NAVEGACIÓN INFERIOR DE FIJACIÓN ESTÁTICA */
+        /* NAV INFERIOR */
         .nav-inferior {
-            position: absolute;          
-            bottom: 0;
-            left: 0; 
-            width: 100%;
-            height: 65px;
-            background-color: #121212;
-            border-top: 1px solid #1f1f1f;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 100;             
-            box-sizing: border-box;
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 65px; background-color: #121212; border-top: 1px solid #1f1f1f;
+            display: flex; justify-content: space-around; align-items: center; z-index: 100; box-sizing: border-box; box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
         }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #666;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            width: 100%;
-            height: 100%;
-            justify-content: center;
-            transition: all 0.2s;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-        }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
-        .nav-item.activo {
-            color: #00f2fe;
-            background-color: #1a1a1a;
-            border-top: 2px solid #00f2fe;
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #666; font-size: 11px; font-weight: 700; text-transform: uppercase; width: 100%; height: 100%; justify-content: center; cursor: pointer; letter-spacing: 0.5px; }
+        .nav-item i { font-size: 18px; margin-bottom: 4px; }
+        .nav-item.activo { color: #00f2fe; background-color: #1a1a1a; border-top: 2px solid #00f2fe; }
 
-        /* INTERACTIVIDAD: COMPARTIR Y QR MODAL */
+        /* MODALES ESTATICOS Y COMPARTIR */
         .modal-compartir {
-            position: absolute;
-            bottom: -100%; 
-            left: 0;
-            right: 0;
-            background-color: #1a1a1a;
-            border-top: 2px solid #a100ff;
-            border-radius: 20px 20px 0 0;
-            padding: 25px 20px;
-            z-index: 150;
-            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+            position: absolute; bottom: -100%; left: 0; right: 0; background-color: #1a1a1a; border-top: 2px solid #a100ff; border-radius: 20px 20px 0 0; padding: 25px 20px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 -10px 25px rgba(0,0,0,0.5); box-sizing: border-box;
         }
-        .modal-compartir.abierto {
-            bottom: 0; 
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .modal-header h3 { margin: 0; font-size: 18px; text-transform: uppercase; color: #00f2fe; }
+        .modal-compartir.abierto { bottom: 0; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h3 { margin: 0; font-size: 16px; text-transform: uppercase; color: #00f2fe; }
         .modal-header i { font-size: 20px; color: #888; cursor: pointer; }
-        .grid-compartir {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            text-align: center;
-        }
-        .opcion-compartir {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            color: #b3b3b3;
-            font-size: 12px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .opcion-compartir .icon-box {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background-color: #2a2a2a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            color: #fff;
-            transition: background-color 0.2s;
-        }
+        .grid-compartir { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; }
+        .opcion-compartir { display: flex; flex-direction: column; align-items: center; gap: 8px; color: #b3b3b3; font-size: 11px; cursor: pointer; text-decoration: none; }
+        .opcion-compartir .icon-box { width: 45px; height: 45px; border-radius: 10px; background-color: #2a2a2a; display: flex; justify-content: center; align-items: center; font-size: 18px; color: #fff; transition: background-color 0.2s; }
         .opcion-compartir:hover .icon-box { background-color: #a100ff; }
     </style>
 </head>
@@ -487,14 +274,24 @@
 
 <div class="tarjeta-container">
 
-    <!-- BARRA SUPERIOR ELECTRÓNICA -->
     <div class="header-superior">
         <i class="fa-solid fa-bars" onclick="toggleMenuLateral()"></i>
-        <div class="logo-dj">DJ FABRIX</div>
+        <div class="logo-dj">
+            DJ FABRIX
+            <div class="eq-bars">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+        </div>
         <i class="fa-solid fa-qrcode" onclick="toggleModalQR()"></i>
     </div>
 
-    <!-- MENÚ LATERAL INTERACTIVO -->
+    <div class="burbuja-messenger" onclick="abrirModalRaspa()">
+        <i class="fa-solid fa-beer-mugs-no_scratch fa-beer-mug-empty"></i>
+        <span>Raspa y Gana</span>
+    </div>
+
     <div id="menuLateral" class="menu-lateral">
         <div class="cuadricula-menu">
             <button class="tarjeta-opcion activa" id="opt-tarjeta" onclick="navegarDesdeMenu('pagina-tarjeta', this)">
@@ -511,34 +308,28 @@
         </button>
     </div>
 
-    <!-- PÁGINA 1: MI TARJETA MAIN DJ SET -->
     <div id="pagina-tarjeta" class="vista-pagina activa">
         <div class="banner-seccion"></div>
         <div class="perfil-contenedor">
-            <div class="foto-perfil"></div>
+            <div class="foto-perfil" onclick="abrirPanelAdmin()" style="cursor: pointer;" title="Panel"></div>
         </div>
         <div class="info-seccion">
             <h1 class="nombre">DJ FABRIX</h1>
             <div class="cargo">GERENTE PROPIETARIO</div>
             
-            <!-- SECCIÓN ACCIONES RÁPIDAS (CON DEEP LINKS MEJORADOS) -->
             <div class="acciones-rapidas-grid">
-                <!-- BOOKING -->
                 <a href="tel:+593998005875" class="boton-redondo-wrapper">
                     <div class="boton-redondo"><i class="fa-solid fa-phone"></i></div>
-                    <span>Booking</span>
+                    <span>Llamar ahora</span>
                 </a>
-                <!-- WHATSAPP -->
                 <a href="https://wa.me/593998005875?text=%C2%A1Hola%20DJ%20Fabrix!%20Vi%20tu%20tarjeta%20digital%20y%20me%20gustar%C3%ADa%20cotizar%20un%20evento." target="_blank" class="boton-redondo-wrapper">
                     <div class="boton-redondo ws-color"><i class="fa-brands fa-whatsapp"></i></div>
                     <span>WhatsApp</span>
                 </a>
-                <!-- INSTAGRAM (DEEP LINK PARA INSTAGRAM APP) -->
                 <a href="instagram://user?username=cfabrix" onclick="setTimeout(function(){ window.location.href='https://www.instagram.com/cfabrix/?hl=es'; }, 400);" class="boton-redondo-wrapper">
                     <div class="boton-redondo ig-color"><i class="fa-brands fa-instagram"></i></div>
                     <span>Instagram</span>
                 </a>
-                <!-- TIKTOK -->
                 <a href="https://www.tiktok.com/@cfabrix?_r=1&_t=ZS-978Ga2GVGnk" target="_blank" class="boton-redondo-wrapper">
                     <div class="boton-redondo tk-color"><i class="fa-brands fa-tiktok"></i></div>
                     <span>TikTok</span>
@@ -548,111 +339,95 @@
             <button class="btn-guardar" onclick="descargarContactoReal()">
                 GUARDAR CONTACTO <i class="fa-solid fa-user-plus"></i>
             </button>
-
-            <button class="btn-compartir" id="shareBtn">
+            <button class="btn-compartir" id="shareBtn" onclick="toggleModalCompartir()">
                 COMPARTIR <i class="fa-solid fa-share-nodes"></i>
             </button>
         </div>
     </div>
 
-    <!-- PÁGINA 2: SERVICIOS (CON SCROLL INTERNO INDEPENDIENTE) -->
     <div id="pagina-nosotros" class="vista-pagina">
         <div class="nosotros-seccion">
-            <h2>¿Qué Ofrecemos?</h2>
-            
-            <!-- TEXTO DE IMPACTO COMERCIAL -->
-            <p style="font-size: 15px; line-height: 1.6; color: #ffffff; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);">
-                Transformamos tu evento en una experiencia inolvidable.
-            </p>
-            <p style="font-size: 14px; line-height: 1.6; color: #b3b3b3; margin-bottom: 15px;">
+            <h2 class="borde-azul">¿Qué Ofrecemos?</h2>
+            <p>
                 Con <strong>DJ FABRIX</strong> combinamos un concepto musical abierto y totalmente personalizado con infraestructura técnica de vanguardia. Nos encargamos de crear la atmósfera perfecta para tu fiesta, garantizando potencia sonora, un despliegue visual impactante y mezclas en vivo que mantendrán la pista de baile llena de principio a fin.
             </p>
-            
             <div class="banner-nosotros"></div>
 
-            <!-- SECCIÓN: TIPOS DE EVENTOS / ESPECIALIDADES -->
-            <h2 style="border-left: 4px solid #00f2fe; margin-top: 30px;">Especialidades</h2>
+            <h2 class="borde-azul">ESPECIALIDADES</h2>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px;">
-                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 13px; font-weight: 600; color: #00f2fe;">
+                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 11px; font-weight: 700; color: #00f2fe; text-transform: uppercase;">
                     <i class="fa-solid fa-champagne-glasses" style="margin-bottom: 5px; display: block; font-size: 16px;"></i> BODAS & PROTOCOLOS
                 </div>
-                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 13px; font-weight: 600; color: #a100ff;">
+                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 11px; font-weight: 700; color: #a100ff; text-transform: uppercase;">
                     <i class="fa-solid fa-briefcase" style="margin-bottom: 5px; display: block; font-size: 16px;"></i> CORPORATIVOS
                 </div>
-                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 13px; font-weight: 600; color: #a100ff;">
+                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 11px; font-weight: 700; color: #a100ff; text-transform: uppercase;">
                     <i class="fa-solid fa-cake-candles" style="margin-bottom: 5px; display: block; font-size: 16px;"></i> FIESTAS PRIVADAS
                 </div>
-                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 13px; font-weight: 600; color: #00f2fe;">
+                <div style="background: #1c1c1e; padding: 12px; border-radius: 8px; border: 1px solid #2c2c2e; text-align: center; font-size: 11px; font-weight: 700; color: #00f2fe; text-transform: uppercase;">
                     <i class="fa-solid fa-clapperboard" style="margin-bottom: 5px; display: block; font-size: 16px;"></i> CLUBES & FESTIVALES
                 </div>
             </div>
             
-            <!-- SECCIÓN DE EQUIPAMIENTO TÉCNICO COMPLETO -->
-            <h2 style="border-left: 4px solid #a100ff; margin-top: 25px;">Rider Técnico / Equipos</h2>
-            <p style="font-size: 13.5px; color: #a3a3a3; margin-bottom: 15px;">Infraestructura y soporte técnico profesional de alta gama:</p>
+            <h2 class="borde-morado">RIDER TÉCNICO / EQUIPOS</h2>
+            <p style="font-size: 13px; color: #8e8e93; margin-top: -5px; margin-bottom: 20px;">Infraestructura y soporte técnico profesional de alta gama:</p>
             
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
-                <!-- 1. SISTEMA DE AUDIO PRINCIPAL -->
-                <div style="display: flex; align-items: flex-start; gap: 12px; background: #1c1c1e; padding: 12px; border-radius: 10px; border: 1px solid #2c2c2e;">
-                    <i class="fa-solid fa-volume-high" style="font-size: 18px; color: #a100ff; width: 22px; text-align: center; margin-top: 3px;"></i>
-                    <div>
-                        <h4 style="margin: 0; font-size: 14px; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px;">Sistema de Audio P.A.</h4>
-                        <ul style="margin: 4px 0 0 0; padding-left: 15px; font-size: 12.5px; color: #8f8f8f; line-height: 1.4;">
-                            <li>4x Parlantes Activos DB Technologies Opera 15</li>
-                            <li>2x Subwoofers Activos DB Technologies Sub 808D</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 2. CONTROL Y MEZCLA -->
-                <div style="display: flex; align-items: flex-start; gap: 12px; background: #1c1c1e; padding: 12px; border-radius: 10px; border: 1px solid #2c2c2e;">
-                    <i class="fa-solid fa-sliders" style="font-size: 18px; color: #00f2fe; width: 22px; text-align: center; margin-top: 3px;"></i>
-                    <div>
-                        <h4 style="margin: 0; font-size: 14px; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px;">Control y Mezcla</h4>
-                        <ul style="margin: 4px 0 0 0; padding-left: 15px; font-size: 12.5px; color: #8f8f8f; line-height: 1.4;">
-                            <li>Controlador DJ Pioneer DDJ-REV1</li>
-                            <li>Consola de Mezcla Profesional Mackie ProFX12</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 3. MICROFONÍA -->
-                <div style="display: flex; align-items: flex-start; gap: 12px; background: #1c1c1e; padding: 12px; border-radius: 10px; border: 1px solid #2c2c2e;">
-                    <i class="fa-solid fa-microphone" style="font-size: 18px; color: #a100ff; width: 22px; text-align: center; margin-top: 3px;"></i>
-                    <div>
-                        <h4 style="margin: 0; font-size: 14px; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px;">Microfonía Profesional</h4>
-                        <ul style="margin: 4px 0 0 0; padding-left: 15px; font-size: 12.5px; color: #8f8f8f; line-height: 1.4;">
-                            <li>1x Micrófono Inalámbrico Sennheiser XS Wireless 1</li>
-                            <li>2x Micrófonos Alámbricos Shure SM58 Vocales</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 4. ILUMINACIÓN Y ATMÓSFERA -->
-                <div style="display: flex; align-items: flex-start; gap: 12px; background: #1c1c1e; padding: 12px; border-radius: 10px; border: 1px solid #2c2c2e;">
-                    <i class="fa-solid fa-lightbulb" style="font-size: 18px; color: #00f2fe; width: 22px; text-align: center; margin-top: 3px;"></i>
-                    <div>
-                        <h4 style="margin: 0; font-size: 14px; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px;">Iluminación, Láser & Efectos</h4>
-                        <ul style="margin: 4px 0 0 0; padding-left: 15px; font-size: 12.5px; color: #8f8f8f; line-height: 1.4;">
-                            <li>2x Cabezas Móviles Mini Beam Robóticas</li>
-                            <li>2x Tachos LED Rítmicos 8x8 de Alta Potencia</li>
-                            <li>1x Sistema Láser Profesional de 4 Líneas</li>
-                            <li>1x Máquina de Humo Atmosférica de 3000W</li>
-                        </ul>
-                    </div>
+            <div class="rider-card">
+                <i class="fa-solid fa-volume-high" style="color: #a100ff;"></i>
+                <div>
+                    <h4>SISTEMA DE AUDIO P.A.</h4>
+                    <ul>
+                        <li>4x Parlantes Activos DB Technologies Opera 15</li>
+                        <li>2x Subwoofers Activos DB Technologies Sub 808D</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- NUEVA SECCIÓN PREMIUM: FORMULARIO INTERACTIVO DE COTIZACIÓN -->
-            <h2 style="border-left: 4px solid #00f2fe; margin-top: 30px;">Cotiza Tu Evento</h2>
-            <p style="font-size: 13.5px; color: #a3a3a3; margin-bottom: 10px;">Completa los datos y recibe tu presupuesto al instante en WhatsApp:</p>
+            <div class="rider-card">
+                <i class="fa-solid fa-sliders" style="color: #00f2fe;"></i>
+                <div>
+                    <h4>CONTROL Y MEZCLA</h4>
+                    <ul>
+                        <li>Controlador DJ Pioneer DDJ-REV1</li>
+                        <li>Consola de Mezcla Profesional Mackie ProFX12</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="rider-card">
+                <i class="fa-solid fa-microphone" style="color: #a100ff;"></i>
+                <div>
+                    <h4>MICROFONÍA PROFESIONAL</h4>
+                    <ul>
+                        <li>1x Micrófono Inalámbrico Sennheiser XS Wireless 1</li>
+                        <li>2x Micrófonos Alámbricos Shure SM58 Vocales</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="rider-card">
+                <i class="fa-solid fa-lightbulb" style="color: #00f2fe;"></i>
+                <div>
+                    <h4>ILUMINACIÓN, LÁSER & EFECTOS</h4>
+                    <ul>
+                        <li>2x Cabezas Móviles Mini Beam Robóticas</li>
+                        <li>2x Tachos LED Rítmicos 8x8 de Alta Potencia</li>
+                        <li>1x Sistema Láser Profesional de 4 Líneas</li>
+                        <li>1x Máquina de Humo Atmosférica de 3000W</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="borde-azul">COTIZA TU EVENTO</h2>
+            <p style="font-size: 13.5px; color: #8e8e93; margin-top: -5px; margin-bottom: 20px;">Completa los datos y recibe tu presupuesto al instante en WhatsApp:</p>
+            
             <div class="form-cotizar">
                 <div class="form-grupo">
-                    <label>Fecha Estimada</label>
+                    <label>FECHA ESTIMADA</label>
                     <input type="date" id="cot-fecha">
                 </div>
                 <div class="form-grupo">
-                    <label>Tipo de Show / Evento</label>
+                    <label>TIPO DE SHOW / EVENTO</label>
                     <select id="cot-tipo">
                         <option value="Boda / Matrimonio">Boda / Matrimonio</option>
                         <option value="Evento Corporativo">Evento Corporativo</option>
@@ -661,42 +436,33 @@
                     </select>
                 </div>
                 <div class="form-grupo">
-                    <label>Ciudad / Ubicación del evento</label>
+                    <label>CIUDAD / UBICACIÓN DEL EVENTO</label>
                     <input type="text" id="cot-ciudad" placeholder="Ej: Latacunga, Quito, Ambato...">
                 </div>
-                <button type="button" onclick="enviarCotizacionWhatsApp()" style="width: 100%; padding: 12px; border: none; border-radius: 6px; background-color: #25D366; color: #fff; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 13px; display: flex; justify-content: center; align-items: center; gap: 8px;">
-                    Solicitar Presupuesto <i class="fa-brands fa-whatsapp"></i>
+                <button type="button" class="btn-solicitar-cot" onclick="enviarCotizacionWhatsApp()">
+                    SOLICITAR PRESUPUESTO <i class="fa-brands fa-whatsapp" style="font-size: 16px;"></i>
                 </button>
             </div>
 
-            <!-- SECCIÓN: PREGUNTAS FRECUENTES (FAQ) -->
-            <h2 style="border-left: 4px solid #00f2fe; margin-top: 35px;">Preguntas Frecuentes</h2>
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;">
-                <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border-left: 3px solid #00f2fe;">
-                    <h5 style="margin: 0 0 5px 0; font-size: 13.5px; color: #ffffff;">¿Con cuánta anticipación debo reservar?</h5>
-                    <p style="margin: 0; font-size: 12.5px; color: #8f8f8f; line-height: 1.4;">Se recomienda separar la fecha con un mínimo de 15 a 30 días mediante un abono inicial.</p>
-                </div>
-                <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border-left: 3px solid #a100ff;">
-                    <h5 style="margin: 0 0 5px 0; font-size: 13.5px; color: #ffffff;">¿Trabajas fuera de tu ciudad base?</h5>
-                    <p style="margin: 0; font-size: 12.5px; color: #8f8f8f; line-height: 1.4;">Sí, cuento con disponibilidad de movilización técnica a cualquier provincia bajo viáticos acordados.</p>
-                </div>
+            <h2 class="borde-azul">PREGUNTAS FRECUENTES</h2>
+            
+            <div class="faq-card borde-izq-azul">
+                <h5>¿Con cuánta anticipación debo reservar?</h5>
+                <p>Se recomienda separar la fecha con un mínimo de 15 a 30 días mediante un abono inicial.</p>
             </div>
 
-            
+            <div class="faq-card borde-izq-morado">
+                <h5>¿Trabajas fuera de tu ciudad base?</h5>
+                <p>Sí, cuento con disponibilidad de movilización técnica a cualquier provincia bajo viáticos acordados.</p>
+            </div>
         </div>
     </div>
 
-    <!-- MENÚ DE NAVEGACIÓN INFERIOR (ESTÁTICO ABSOLUTO EN EL MARCO) -->
     <div class="nav-inferior">
-        <a id="nav-tarjeta" class="nav-item activo" onclick="irAPagina('pagina-tarjeta', this)">
-            <i class="fa-solid fa-id-card"></i>Tarjeta
-        </a>
-        <a id="nav-nosotros" class="nav-item" onclick="irAPagina('pagina-nosotros', this)">
-            <i class="fa-solid fa-sliders"></i>Servicios
-        </a>
+        <a id="nav-tarjeta" class="nav-item activo" onclick="irAPagina('pagina-tarjeta', this)"><i class="fa-solid fa-id-card"></i>TARJETA</a>
+        <a id="nav-nosotros" class="nav-item" onclick="irAPagina('pagina-nosotros', this)"><i class="fa-solid fa-sliders"></i>SERVICIOS</a>
     </div>
 
-    <!-- MENÚ EMERGENTE DE COMPARTIR -->
     <div id="modalCompartir" class="modal-compartir">
         <div class="modal-header">
             <h3>Compartir Tarjeta</h3>
@@ -718,49 +484,216 @@
         </div>
     </div>
 
-    <!-- MODAL INTERACTIVO PARA TU CÓDIGO QR -->
     <div id="modalQR" class="modal-compartir">
         <div class="modal-header">
             <h3>Mi Código QR</h3>
             <i class="fa-solid fa-xmark" onclick="toggleModalQR()"></i>
         </div>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 10px 0 20px 0;">
-            <img src="./qr_neon.png" alt="QR DJ FABRIX" style="width: 200px; height: 200px; border-radius: 12px; border: 3px solid #a100ff; box-shadow: 0 0 20px rgba(161, 0, 255, 0.5);">
+            <img src="./qr_neon.png" alt="QR DJ FABRIX" style="width: 200px; height: 200px; border-radius: 12px; border: 3px solid #a100ff; box-shadow: 0 0 20px rgba(161, 0, 255, 0.5); background: #1a1a1a; display: flex; align-items: center; justify-content: center; color: #a100ff;">
             <span style="font-size: 13px; color: #a3a3a3; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Escanéame para guardar el portafolio</span>
+        </div>
+    </div>
+
+    <div id="modalJuego" class="modal-compartir">
+        <div class="modal-header">
+            <h3>Raspa y Gana tu Pola 🍻</h3>
+            <i class="fa-solid fa-xmark" onclick="toggleModalJuego()"></i>
+        </div>
+        <div style="text-align: center; padding: 5px 0 20px 0;">
+            <div class="marcador-premios">
+                <i class="fa-solid fa-fire"></i> <span id="textoContadorPremios">Cargando stock...</span>
+            </div>
+            <p id="instruccionesJuego" style="font-size: 13px; color: #e0e0e0; margin-bottom: 15px;">
+                Usa tu dedo o mouse sobre el círculo gris para raspar y descubrir si ganaste.
+            </p>
+            <div class="raspa-contenedor">
+                <div id="raspaResultado" class="raspa-resultado-oculto"></div>
+                <canvas id="canvasRaspable" class="canvas-raspable" width="232" height="232"></canvas>
+            </div>
+            <div id="contenedorBotonPremio" style="display:none; margin-top:15px;">
+                <a id="btnReclamarPremio" href="#" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 20px; font-weight: 700; text-transform: uppercase; font-size: 12px; box-shadow: 0 4px 10px rgba(37,211,102,0.3);">
+                    Enviar Resultado <i class="fa-brands fa-whatsapp"></i>
+                </a>
+            </div>
         </div>
     </div>
 
 </div>
 
-<!-- JAVASCRIPT SINCRONIZADO -->
 <script>
-    function toggleMenuLateral() {
-        const menu = document.getElementById('menuLateral');
-        menu.classList.toggle('abierto');
+    let juegoInicializado = false;
+
+    if (localStorage.getItem('stockPremiosFabrix') === null) {
+        localStorage.setItem('stockPremiosFabrix', '5');
     }
 
-    function toggleModalCompartir() {
-        const modal = document.getElementById('modalCompartir');
-        modal.classList.toggle('abierto');
+    document.addEventListener("DOMContentLoaded", function() {
+        const hoy = new Date().toISOString().split('T')[0];
+        const inputFecha = document.getElementById('cot-fecha');
+        if(inputFecha) inputFecha.setAttribute('min', hoy);
+    });
+
+    function toggleMenuLateral() { document.getElementById('menuLateral').classList.toggle('abierto'); }
+    function toggleModalCompartir() { document.getElementById('modalCompartir').classList.toggle('abierto'); }
+    function toggleModalQR() { document.getElementById('modalQR').classList.toggle('abierto'); }
+    function toggleModalJuego() { document.getElementById('modalJuego').classList.toggle('abierto'); }
+
+    function abrirModalRaspa() {
+        toggleModalJuego();
+        if (!juegoInicializado) {
+            inicializarJuegoRaspa();
+        }
     }
 
-    function toggleModalQR() {
-        const modal = document.getElementById('modalQR');
-        modal.classList.toggle('abierto');
+    function inicializarJuegoRaspa() {
+        juegoInicializado = true;
+        document.getElementById('contenedorBotonPremio').style.display = "none";
+        
+        const canvas = document.getElementById('canvasRaspable');
+        const ctx = canvas.getContext('2d');
+        const divResultado = document.getElementById('raspaResultado');
+        const btnReclamar = document.getElementById('btnReclamarPremio');
+        const txtContador = document.getElementById('textoContadorPremios');
+        const instrucciones = document.getElementById('instruccionesJuego');
+
+        let stockActual = parseInt(localStorage.getItem('stockPremiosFabrix'));
+
+        if (localStorage.getItem('jugadoFabrix') !== null) {
+            const estadoAnterior = localStorage.getItem('jugadoFabrix'); 
+            canvas.style.display = "none";
+            instrucciones.innerText = "Ya consumiste tu oportunidad en esta dinámica.";
+            txtContador.innerText = stockActual > 0 ? `Premios restantes: ${stockActual}` : `Premios agotados`;
+
+            if (estadoAnterior === "ganador") {
+                divResultado.innerHTML = `
+                    <i class="fa-solid fa-beer-mugs-no_scratch" style="color:#ff9900;"></i>
+                    <h4 style="color:#25D366;">¡TU PREMIO SIGUE AQUÍ!</h4>
+                    <p>Ya ganaste una cerveza anteriormente. Haz clic abajo para validarla.</p>
+                `;
+                btnReclamar.setAttribute('href', `https://wa.me/593998005875?text=%C2%A1Hola%20DJ%20Fabrix!%20Ya%20hab%C3%ADa%20ganado%20mi%20cerveza%20en%20tu%20tarjeta%20digital%20y%20quiero%20hacerla%20v%C3%A1lida%20para%20mi%20show.`);
+            } else {
+                divResultado.innerHTML = `
+                    <i class="fa-solid fa-face-frown" style="color:#666;"></i>
+                    <h4 style="color:#ff3b30;">OPORTUNIDAD AGOTADA</h4>
+                    <p>Ya jugaste anteriormente y no obtuviste premio. ¡Suerte en tu próximo evento!</p>
+                `;
+                btnReclamar.setAttribute('href', `https://wa.me/593998005875?text=%C2%A1Hola%20DJ%20Fabrix!%20Ya%20particip%C3%A9%20en%20el%20Raspa%20de%20tu%20tarjeta%20y%20no%20gan%C3%A9%2C%20pero%20me%20gustar%C3%ADa%20cotizar.`);
+            }
+            document.getElementById('contenedorBotonPremio').style.display = "block";
+            return;
+        }
+
+        if (stockActual <= 0) {
+            canvas.style.display = "none";
+            instrucciones.innerText = "Fin del stock.";
+            txtContador.innerText = `Premios agotados`;
+            divResultado.innerHTML = `
+                <i class="fa-solid fa-triangle-exclamation" style="color:#ff9900;"></i>
+                <h4 style="color:#ff9900;">¡PREMIOS AGOTADOS!</h4>
+                <p>Las cervezas de cortesía se terminaron por completo. ¡Atento a nuevas dinámicas!</p>
+            `;
+            btnReclamar.setAttribute('href', `https://wa.me/593998005875?text=%C2%A1Hola%20DJ%20Fabrix!%20Vi%20que%20los%20premios%20se%20agotaron%20pero%20quiero%20cotizar.`);
+            document.getElementById('contenedorBotonPremio').style.display = "block";
+            localStorage.setItem('jugadoFabrix', 'perdedor');
+            return;
+        }
+
+        canvas.style.display = "block";
+        txtContador.innerText = `Premios restantes: ${stockActual}`;
+
+        const porcentajeProbabilidadGanar = 3; 
+        const numeroAleatorio = Math.floor(Math.random() * 100) + 1;
+
+        if (numeroAleatorio <= porcentajeProbabilidadGanar) {
+            stockActual--;
+            localStorage.setItem('stockPremiosFabrix', stockActual.toString());
+            localStorage.setItem('jugadoFabrix', 'ganador');
+
+            divResultado.innerHTML = `
+                <i class="fa-solid fa-beer-mugs-no_scratch" style="color:#ff9900;"></i>
+                <h4 style="color:#25D366;">¡GANASTE UNA BIER!</h4>
+                <p>Quedan sólo ${stockActual} polas disponibles en stock.</p>
+            `;
+            btnReclamar.setAttribute('href', `https://wa.me/593998005875?text=%C2%A1Hola%20DJ%20Fabrix!%20Acabo%20de%20usar%20el%20Raspa%20y%20Gana%20de%20tu%20tarjeta%20y%20%C2%A1Me%20gan%C3%A9%20la%20cerveza%20de%20cortes%C3%ADa!%20%F0%9F%8D%BB`);
+        } else {
+            localStorage.setItem('jugadoFabrix', 'perdedor');
+
+            divResultado.innerHTML = `
+                <i class="fa-solid fa-face-frown" style="color:#666;"></i>
+                <h4 style="color:#ff3b30;">SUERTE PARA LA PRÓXIMA</h4>
+                <p>Sigue intentándolo, aún quedan ${stockActual} polas.</p>
+            `;
+            btnReclamar.setAttribute('href', `https://wa.me/593998005875?text=%C2%A1Hola%20DJ%20Fabrix!%20Estuve%20jugando%20al%20Raspa%20de%20tu%20tarjeta%20digital.%20No%20gan%C3%A9%20pero%20quiero%20cotizar.`);
+        }
+
+        ctx.fillStyle = '#3a3a3c';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = 'bold 14px Segoe UI, Roboto';
+        ctx.fillStyle = '#8e8e93';
+        ctx.textAlign = 'center';
+        ctx.fillText('RASPA AQUÍ CON TU DEDO', canvas.width / 2, canvas.height / 2 + 5);
+
+        let estaDibujando = false;
+        function obtenerPosicion(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clienteX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clienteY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clienteX - rect.left, y: clienteY - rect.top };
+        }
+        function empezarRaspado(e) { estaDibujando = true; raspar(e); }
+        function terminarRaspado() { estaDibujando = false; ctx.beginPath(); verificarPorcentajeRaspado(); }
+
+        function raspar(e) {
+            if (!estaDibujando) return;
+            e.preventDefault();
+            const pos = obtenerPosicion(e);
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.lineWidth = 35;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        canvas.addEventListener('mousedown', empezarRaspado);
+        canvas.addEventListener('mousemove', raspar);
+        canvas.addEventListener('mouseup', terminarRaspado);
+        canvas.addEventListener('mouseleave', terminarRaspado);
+        canvas.addEventListener('touchstart', empezarRaspado);
+        canvas.addEventListener('touchmove', raspar);
+        canvas.addEventListener('touchend', terminarRaspado);
+
+        function verificarPorcentajeRaspado() {
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixeles = imgData.data;
+            let pixelesBorrados = 0;
+            for (let i = 3; i < pixeles.length; i += 4) { if (pixeles[i] === 0) { pixelesBorrados++; } }
+            const porcentajeBoreado = (pixelesBorrados / (canvas.width * canvas.height)) * 100;
+            
+            if (porcentajeBoreado > 35) {
+                document.getElementById('contenedorBotonPremio').style.display = "block";
+                txtContador.innerText = stockActual > 0 ? `Premios restantes: ${stockActual}` : `Premios agotados`;
+                canvas.style.transition = "opacity 0.5s ease";
+                canvas.style.opacity = "0";
+                setTimeout(() => { canvas.style.pointerEvents = "none"; }, 500);
+            }
+        }
     }
+
+    document.getElementById('modalJuego').addEventListener('transitionend', function() {
+        if (!this.classList.contains('abierto')) {
+            juegoInicializado = false; 
+        }
+    });
 
     function irAPagina(idPagina, botonMenu) {
-        document.querySelectorAll('.vista-pagina').forEach(pagina => {
-            pagina.classList.remove('activa');
-        });
+        document.querySelectorAll('.vista-pagina').forEach(pagina => { pagina.classList.remove('activa'); });
         document.getElementById(idPagina).classList.add('activa');
-
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('activo'));
         if(botonMenu) botonMenu.classList.add('activo');
-
-        document.querySelectorAll('.tarjeta-opcion').forEach(tarjeta => tarjeta.classList.remove('activa'));
-        if(idPagina === 'pagina-tarjeta') document.getElementById('opt-tarjeta').classList.add('activa');
-        if(idPagina === 'pagina-nosotros') document.getElementById('opt-nosotros').classList.add('activa');
     }
 
     function navegarDesdeMenu(idPagina, botonGrid) {
@@ -770,34 +703,17 @@
         toggleMenuLateral();
     }
 
-    // LÓGICA DE PROCESAMIENTO E INYECCIÓN DE DATOS PARA WHATSAPP
     function enviarCotizacionWhatsApp() {
         const fecha = document.getElementById('cot-fecha').value;
         const tipo = document.getElementById('cot-tipo').value;
         const ciudad = document.getElementById('cot-ciudad').value;
-
-        if(!fecha || !ciudad) {
-            alert('Por favor, llena la fecha y la ubicación para procesar la cotización.');
-            return;
-        }
-
-        const mensaje = `¡Hola DJ Fabrix! Vi tu tarjeta digital y me interesa cotizar un show. Aquí los detalles:\n\n` +
-                        `🎧 Tipo de Evento: ${tipo}\n` +
-                        `📅 Fecha Estimada: ${fecha}\n` +
-                        `📍 Ubicación: ${ciudad}`;
-        
-        const urlFinal = `https://wa.me/593998005875?text=${encodeURIComponent(mensaje)}`;
-        window.open(urlFinal, '_blank');
+        if(!fecha || !ciudad) { alert('Por favor, llena la fecha y la ubicación.'); return; }
+        const mensaje = `¡Hola DJ Fabrix! Vi tu tarjeta digital y me interesa cotizar un show. Aquí los detalles:\n\n🎧 Tipo de Evento: ${tipo}\n📅 Fecha Estimada: ${fecha}\n📍 Ubicación: ${ciudad}`;
+        window.open(`https://wa.me/593998005875?text=${encodeURIComponent(mensaje)}`, '_blank');
     }
 
     function descargarContactoReal() {
-        const vcard = "BEGIN:VCARD\n" +
-                      "VERSION:3.0\n" +
-                      "FN:DJ FABRIX\n" +
-                      "ORG:DJ  fiesta\n" +
-                      "TITLE:Dj Fabrix\n" +
-                      "TEL;TYPE=CELL:+593998005875\n" +
-                      "END:VCARD";
+        const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:DJ FABRIX\nORG:DJ  fiesta\nTITLE:Dj Fabrix\nTEL;TYPE=CELL:+593998005875\nEND:VCARD";
         const blob = new Blob([vcard], { type: "text/vcard" });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -806,28 +722,68 @@
         a.click();
     }
 
-    document.getElementById('shareBtn').addEventListener('click', async () => {
-        const isInAppBrowser = /FBAN|FBAV|Instagram|Twitter|TikTok/i.test(navigator.userAgent);
-        
-        if (navigator.share && !isInAppBrowser) {
-            try {
-                await navigator.share({
-                    title: 'DJ Digital Card',
-                    text: 'Echa un vistazo a mi tarjeta musical digital.',
-                    url: window.location.href
-                });
-            } catch (err) { 
-                console.log("Menú cerrado o cancelado"); 
-            }
-        } else {
-            toggleModalCompartir();
-        }
-    });
-
     function copiarEnlaceReal() {
         navigator.clipboard.writeText(window.location.href);
-        alert('¡Enlace copiado al portapapeles! Listo para pegar.');
+        alert('¡Enlace copiado al portapapeles!');
         toggleModalCompartir();
+    }
+
+    /* ==========================
+       PANEL SECRETO ADMIN
+    ========================== */
+
+    function abrirPanelAdmin() {
+        const clave = prompt("Ingrese la clave de administrador");
+        if (clave !== "FABRIX2026") {
+            alert("Clave incorrecta");
+            return;
+        }
+
+        const opcion = prompt(
+            "PANEL ADMIN\n\n1 = Reiniciar jugadores\n2 = Reiniciar stock\n3 = Reiniciar todo\n4 = Ver stock actual"
+        );
+
+        let huboCambios = false;
+
+        switch(opcion) {
+            case "1":
+                localStorage.removeItem("jugadoFabrix");
+                alert("Jugadores reiniciados");
+                huboCambios = true;
+                break;
+
+            case "2":
+                const nuevoStock = prompt("Nuevo stock:");
+                if(nuevoStock !== null) {
+                    localStorage.setItem("stockPremiosFabrix", nuevoStock);
+                    alert("Stock actualizado");
+                    huboCambios = true;
+                }
+                break;
+
+            case "3":
+                localStorage.removeItem("jugadoFabrix");
+                localStorage.setItem("stockPremiosFabrix", "5");
+                alert("Juego reiniciado completamente");
+                huboCambios = true;
+                break;
+
+            case "4":
+                alert("Stock actual: " + localStorage.getItem("stockPremiosFabrix"));
+                break;
+
+            default:
+                if(opcion !== null) alert("Opción no válida");
+        }
+
+        // Si el modal está abierto, forzamos la actualización visual
+        if (huboCambios) {
+            juegoInicializado = false;
+            const modal = document.getElementById('modalJuego');
+            if (modal.classList.contains('abierto')) {
+                inicializarJuegoRaspa();
+            }
+        }
     }
 </script>
 </body>
