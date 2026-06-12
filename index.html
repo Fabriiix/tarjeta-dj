@@ -222,8 +222,7 @@
         .nosotros-seccion h2 { font-size: 20px; font-weight: 800; color: #ffffff; margin-top: 25px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; }
         .borde-azul { border-left: 4px solid #00f2fe; padding-left: 12px; }
         .borde-morado { border-left: 4px solid #a100ff; padding-left: 12px; }
-        .nosotros-seccion p { font-size: 14px; line-height: 1.6; color: #b3b3b3; }
-        .banner-nosotros { height: 140px; background-image: url('hey.png'); background-size: cover; background-position: center; border-radius: 8px; margin: 15px 0; border: 1px solid #333; }
+        
 
         .rider-card { display: flex; align-items: flex-start; gap: 15px; background: #16161a; padding: 16px; border-radius: 12px; border: 1px solid #222226; margin-bottom: 15px; }
         .rider-card i { font-size: 20px; margin-top: 2px; }
@@ -379,7 +378,7 @@
             <div class="rider-card">
                 <i class="fa-solid fa-volume-high" style="color: #a100ff;"></i>
                 <div>
-                    <h4>SISTEMA DE AUDIO P.A.</h4>
+                    <h4>SISTEMA DE AUDIO </h4>
                     <ul>
                         <li>4x Parlantes Activos DB Technologies Opera 15</li>
                         <li>2x Subwoofers Activos DB Technologies Sub 808D</li>
@@ -403,7 +402,7 @@
                 <div>
                     <h4>MICROFONÍA PROFESIONAL</h4>
                     <ul>
-                        <li>1x Micrófono Inalámbrico Sennheiser XS Wireless 1</li>
+                        <li>1x Micrófono Inalámbrico Sennheiser XS Wireless1</li>
                         <li>2x Micrófonos Alámbricos Shure SM58 Vocales</li>
                     </ul>
                 </div>
@@ -501,7 +500,7 @@
 
     <div id="modalJuego" class="modal-compartir">
         <div class="modal-header">
-            <h3>Raspa y Gana tu Pola 🍻</h3>
+            <h3>Raspa y Gana una cerveza🍻</h3>
             <i class="fa-solid fa-xmark" onclick="toggleModalJuego()"></i>
         </div>
         <div style="text-align: center; padding: 5px 0 20px 0;">
@@ -509,7 +508,7 @@
                 <i class="fa-solid fa-fire"></i> <span id="textoContadorPremios">Cargando stock...</span>
             </div>
             <p id="instruccionesJuego" style="font-size: 13px; color: #e0e0e0; margin-bottom: 15px;">
-                Usa tu dedo o mouse sobre el círculo gris para raspar y descubrir si ganaste.
+                Usa tu dedo sobre el círculo gris para raspar y descubrir si ganaste.
             </p>
             <div class="raspa-contenedor">
                 <div id="raspaResultado" class="raspa-resultado-oculto"></div>
@@ -528,8 +527,12 @@
 <script>
     let juegoInicializado = false;
 
+    // Inicializar el Stock y Probabilidad si no existen en el almacenamiento local
     if (localStorage.getItem('stockPremiosFabrix') === null) {
         localStorage.setItem('stockPremiosFabrix', '5');
+    }
+    if (localStorage.getItem('probabilidadGanarFabrix') === null) {
+        localStorage.setItem('probabilidadGanarFabrix', '3'); // El default original era 3%
     }
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -606,7 +609,8 @@
         canvas.style.display = "block";
         txtContador.innerText = `Premios restantes: ${stockActual}`;
 
-        const porcentajeProbabilidadGanar = 3; 
+        // Obtener la probabilidad real de la memoria del navegador
+        const porcentajeProbabilidadGanar = parseInt(localStorage.getItem('probabilidadGanarFabrix')) || 3; 
         const numeroAleatorio = Math.floor(Math.random() * 100) + 1;
 
         if (numeroAleatorio <= porcentajeProbabilidadGanar) {
@@ -616,7 +620,7 @@
 
             divResultado.innerHTML = `
                 <i class="fa-solid fa-beer-mugs-no_scratch" style="color:#ff9900;"></i>
-                <h4 style="color:#25D366;">¡GANASTE UNA BIER!</h4>
+                <h4 style="color:#25D366;">¡GANASTE UNA CERVEZA!</h4>
                 <p>Quedan sólo ${stockActual} polas disponibles en stock.</p>
             `;
             btnReclamar.setAttribute('href', `https://wa.me/593998005875?text=%C2%A1Hola%20DJ%20Fabrix!%20Acabo%20de%20usar%20el%20Raspa%20y%20Gana%20de%20tu%20tarjeta%20y%20%C2%A1Me%20gan%C3%A9%20la%20cerveza%20de%20cortes%C3%ADa!%20%F0%9F%8D%BB`);
@@ -766,7 +770,7 @@
         }
 
         const opcion = prompt(
-            "PANEL ADMIN\n\n1 = Reiniciar jugadores\n2 = Modificar cantidad de stock\n3 = Reiniciar todo (Stock vuelve a 5)\n4 = Ver stock actual"
+            "PANEL ADMIN\n\n1 = Reiniciar jugadores\n2 = Modificar cantidad de stock\n3 = Reiniciar todo (Pregunta stock)\n4 = Ver stock actual\n5 = Modificar probabilidad de ganar"
         );
 
         let huboCambios = false;
@@ -779,7 +783,6 @@
                 break;
 
             case "2":
-                // Mostrar stock actual y pedir el nuevo
                 let stockActual = localStorage.getItem("stockPremiosFabrix");
                 const nuevoStock = prompt("El stock actual es: " + stockActual + "\n\nIngrese la nueva cantidad de stock que desea tener:");
                 
@@ -794,13 +797,37 @@
 
             case "3":
                 localStorage.removeItem("jugadoFabrix");
-                localStorage.setItem("stockPremiosFabrix", "5");
-                alert("Juego reiniciado completamente. El stock vuelve a ser 5.");
-                huboCambios = true;
+                let nuevoStockReset = prompt("Has elegido reiniciar todos los jugadores.\n\n¿Cuánto stock de premios deseas tener disponible ahora?");
+                
+                if(nuevoStockReset !== null && nuevoStockReset.trim() !== "" && !isNaN(nuevoStockReset)) {
+                    localStorage.setItem("stockPremiosFabrix", parseInt(nuevoStockReset).toString());
+                    alert("Juego reiniciado completamente. Nuevo stock establecido en: " + nuevoStockReset);
+                    huboCambios = true;
+                } else if (nuevoStockReset !== null) {
+                    alert("Número no válido. Se canceló la operación de reinicio completo.");
+                }
                 break;
 
             case "4":
-                alert("Stock actual: " + localStorage.getItem("stockPremiosFabrix"));
+                alert("Stock actual: " + localStorage.getItem("stockPremiosFabrix") + "\nProbabilidad actual: " + localStorage.getItem("probabilidadGanarFabrix") + "%");
+                break;
+                
+            case "5":
+                let probActual = localStorage.getItem("probabilidadGanarFabrix");
+                const nuevaProbabilidad = prompt("La probabilidad actual de ganar es de " + probActual + "%\n\nIngrese el nuevo porcentaje de probabilidad (Ejemplo: 10 para 10%):");
+                
+                if (nuevaProbabilidad !== null && nuevaProbabilidad.trim() !== "" && !isNaN(nuevaProbabilidad)) {
+                    let probNumerica = parseInt(nuevaProbabilidad);
+                    if (probNumerica >= 0 && probNumerica <= 100) {
+                        localStorage.setItem("probabilidadGanarFabrix", probNumerica.toString());
+                        alert("Probabilidad actualizada exitosamente al " + probNumerica + "%");
+                        huboCambios = true;
+                    } else {
+                        alert("Por favor ingrese un número entre el 0 y el 100.");
+                    }
+                } else if (nuevaProbabilidad !== null) {
+                    alert("Por favor ingrese un número válido.");
+                }
                 break;
 
             default:
